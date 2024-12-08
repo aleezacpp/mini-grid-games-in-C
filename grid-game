@@ -1,0 +1,96 @@
+
+void dgrid(char grid[5][5]);
+void changes(char grid[5][5], int *px, int *py, int *collected, char move);
+void dgrid(char grid[5][5]){
+    for (int i=0;i<5;i++){
+        for (int j=0;j<5;j++){
+            printf("%c",grid[i][j]);
+        }
+        printf("\n");
+    }
+}
+void changes(char grid[5][5], int *px, int *py, int *collected, char move){
+    int newx=*px;
+    int newy=*py; //to add changes
+    switch (move) {
+        case 'A':
+        newy--;
+        break;
+        case 'W':
+        newx--;
+        break;
+        case 'D':
+        newy++;
+        break;
+        case 'S':
+        newx++;
+        break;
+        default:
+        printf("INVALID MOVE\n");
+        return;
+    }
+
+    if ((newx<0)||(newx>4)||(newy<0)||(newy>4)) {
+        printf("YOU HIT A WALL\n");
+        return;
+    }
+    if (grid[newx][newy]=='I'){
+        (*collected)++;
+        printf("ITEM COLLECTED\nITEM COUNT:%d\n",*collected);
+    }
+
+    if (grid[newx][newy]=='X'){
+        printf("YOU HIT AN OBSTACLE\n");
+        return;
+    }
+
+
+    grid[*px][*py]=' ';
+    grid[newx][newy]='P';
+    *px=newx;
+    *py=newy;
+
+}
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+int main(){
+
+
+
+
+
+char grid[5][5] = {
+{' ', ' ', 'I', 'X', ' '},
+{' ', 'X', ' ', ' ', ' '},
+{'I', ' ', 'X', 'X', ' '},
+{' ', ' ', ' ', 'I', 'X'},
+{' ', 'X', ' ', ' ', 'P'}
+};
+int px=4;
+int py=4; //starting position
+int collected=0;
+char move;
+printf("WELCOME TO GRID GAME\n");
+while (1){
+
+
+printf("Controls: W (up), S (down), A (left), D (right), Q (quit)\n");
+dgrid(grid);
+
+printf("ENTER MOVE: \n");
+scanf(" %c",&move);
+move=toupper(move);
+
+if (move=='Q'){
+    printf("EXITING GAME---\n");
+    break;
+}
+else if ((move=='A')||(move=='S')||(move=='D')||(move=='W')){
+    changes(grid, &px, &py, &collected, move);
+}
+
+}
+return 0;
+}
